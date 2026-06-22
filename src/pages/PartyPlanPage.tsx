@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { cocktails } from '../data';
+import { generateShoppingList } from '../utils';
 import type { PartyPlanItem, ShoppingListItem } from '../types';
 
 interface Props {
@@ -34,31 +35,10 @@ export function PartyPlanPage({
   }, [sortedPlan]);
 
   const shoppingList = useMemo((): ShoppingListItem[] => {
-    const ingredientMap = new Map<string, { amounts: string[]; cocktails: string[] }>();
-
-    planCocktails.forEach(({ cocktail }) => {
-      if (!cocktail) return;
-      cocktail.ingredients.forEach(ing => {
-        const existing = ingredientMap.get(ing.name);
-        if (existing) {
-          existing.amounts.push(ing.amount);
-          if (!existing.cocktails.includes(cocktail.name)) {
-            existing.cocktails.push(cocktail.name);
-          }
-        } else {
-          ingredientMap.set(ing.name, {
-            amounts: [ing.amount],
-            cocktails: [cocktail.name],
-          });
-        }
-      });
-    });
-
-    return Array.from(ingredientMap.entries()).map(([name, data]) => ({
-      name,
-      totalAmount: data.amounts.join(' + '),
-      cocktails: data.cocktails,
-    }));
+    const cocktailList = planCocktails
+      .map(p => p.cocktail)
+      .filter((c): c is typeof cocktails[0] => c !== undefined);
+    return generateShoppingList(cocktailList);
   }, [planCocktails]);
 
   const moveItem = (index: number, direction: 'up' | 'down') => {
@@ -179,7 +159,23 @@ export function PartyPlanPage({
                 <div key={index} className="shopping-item">
                   <div className="shopping-item-main">
                     <span className="shopping-item-name">{item.name}</span>
-                    <span className="shopping-item-amount">{item.totalAmount}</span>
+                  </div>
+                  <div className="shopping-item-amounts">
+                    {item.amountGroups.map((group, gIndex) => (
+                      <div
+                        key={gIndex}
+                        className={`shopping-amount-row ${group.type}`}
+                      >
+                        <span className="shopping-amount-value">
+                          {group.totalAmount}
+                        </span>
+                        {group.count > 1 && group.type !== 'description' && (
+                          <span className="shopping-amount-count">
+                            ({group.count}款酒使用)
+                          </span>
+                        )}
+                      </div>
+                    ))}
                   </div>
                   <div className="shopping-item-cocktails">
                     用于：{item.cocktails.join('、')}

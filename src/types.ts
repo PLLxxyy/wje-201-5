@@ -24,6 +24,22 @@ export interface PartyPlanItem {
 
 export interface ShoppingListItem {
   name: string;
-  totalAmount: string;
+  amountGroups: ShoppingAmountGroup[];
   cocktails: string[];
+}
+
+export interface ShoppingAmountGroup {
+  type: 'numeric' | 'range' | 'description';
+  unit: string;
+  totalAmount: string;
+  count: number;
+}
+
+export interface ParsedAmount {
+  type: 'numeric' | 'range' | 'description';
+  value: number;
+  min?: number;
+  max?: number;
+  unit: string;
+  raw: string;
 }
