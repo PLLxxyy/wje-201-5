@@ -16,3 +16,14 @@ export interface Cocktail {
 export type BaseSpirit = '伏特加' | '威士忌' | '朗姆酒' | '金酒' | '龙舌兰' | '其他';
 
 export const BASE_SPIRITS: BaseSpirit[] = ['伏特加', '威士忌', '朗姆酒', '金酒', '龙舌兰', '其他'];
+
+export interface PartyPlanItem {
+  cocktailId: string;
+  order: number;
+}
+
+export interface ShoppingListItem {
+  name: string;
+  totalAmount: string;
+  cocktails: string[];
+}

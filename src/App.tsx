@@ -2,10 +2,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { HomePage } from './pages/HomePage';
 import { DetailPage } from './pages/DetailPage';
 import { FavoritesPage } from './pages/FavoritesPage';
+import { PartyPlanPage } from './pages/PartyPlanPage';
+import type { PartyPlanItem } from './types';
 
-type Page = { type: 'home' } | { type: 'detail'; id: string } | { type: 'favorites' };
+type Page = { type: 'home' } | { type: 'detail'; id: string } | { type: 'favorites' } | { type: 'party-plan' };
 
 const FAVORITES_KEY = 'cocktail-favorites';
+const PARTY_PLAN_KEY = 'cocktail-party-plan';
 
 function loadFavorites(): string[] {
   try {
@@ -20,18 +23,56 @@ function saveFavorites(favs: string[]) {
   localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
 }
 
+function loadPartyPlan(): PartyPlanItem[] {
+  try {
+    const raw = localStorage.getItem(PARTY_PLAN_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function savePartyPlan(items: PartyPlanItem[]) {
+  localStorage.setItem(PARTY_PLAN_KEY, JSON.stringify(items));
+}
+
 export default function App() {
   const [page, setPage] = useState<Page>({ type: 'home' });
   const [favorites, setFavorites] = useState<string[]>(loadFavorites);
+  const [partyPlan, setPartyPlan] = useState<PartyPlanItem[]>(loadPartyPlan);
 
   useEffect(() => {
     saveFavorites(favorites);
   }, [favorites]);
 
+  useEffect(() => {
+    savePartyPlan(partyPlan);
+  }, [partyPlan]);
+
   const toggleFavorite = useCallback((id: string) => {
     setFavorites(prev =>
       prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id],
     );
+  }, []);
+
+  const togglePartyPlan = useCallback((id: string) => {
+    setPartyPlan(prev => {
+      const exists = prev.find(p => p.cocktailId === id);
+      if (exists) {
+        return prev.filter(p => p.cocktailId !== id);
+      } else {
+        const maxOrder = prev.length > 0 ? Math.max(...prev.map(p => p.order)) : 0;
+        return [...prev, { cocktailId: id, order: maxOrder + 1 }];
+      }
+    });
+  }, []);
+
+  const updatePartyPlanOrder = useCallback((items: PartyPlanItem[]) => {
+    setPartyPlan(items);
+  }, []);
+
+  const clearPartyPlan = useCallback(() => {
+    setPartyPlan([]);
   }, []);
 
   const navigate = useCallback((p: Page) => {
@@ -66,6 +107,13 @@ export default function App() {
               ❤️ 收藏
               {favorites.length > 0 && <span className="badge">{favorites.length}</span>}
             </button>
+            <button
+              className={`nav-btn ${page.type === 'party-plan' ? 'active' : ''}`}
+              onClick={() => navigate({ type: 'party-plan' })}
+            >
+              🎉 派对计划
+              {partyPlan.length > 0 && <span className="badge">{partyPlan.length}</span>}
+            </button>
           </nav>
         </div>
       </header>
@@ -75,6 +123,8 @@ export default function App() {
           favorites={favorites}
           toggleFavorite={toggleFavorite}
           openDetail={(id) => navigate({ type: 'detail', id })}
+          partyPlanIds={partyPlan.map(p => p.cocktailId)}
+          togglePartyPlan={togglePartyPlan}
         />
       )}
 
@@ -91,6 +141,17 @@ export default function App() {
         <FavoritesPage
           favorites={favorites}
           toggleFavorite={toggleFavorite}
+          openDetail={(id) => navigate({ type: 'detail', id })}
+          goHome={() => navigate({ type: 'home' })}
+        />
+      )}
+
+      {page.type === 'party-plan' && (
+        <PartyPlanPage
+          partyPlan={partyPlan}
+          updatePartyPlanOrder={updatePartyPlanOrder}
+          togglePartyPlan={togglePartyPlan}
+          clearPartyPlan={clearPartyPlan}
           openDetail={(id) => navigate({ type: 'detail', id })}
           goHome={() => navigate({ type: 'home' })}
         />

@@ -563,6 +563,230 @@
         color: var(--primary);
       }
 
+      /* ===== Card Actions ===== */
+      .card-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .party-check-btn {
+        background: none;
+        border: none;
+        font-size: 22px;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+        transition: var(--transition);
+      }
+
+      .party-check-btn:hover {
+        transform: scale(1.2);
+      }
+
+      /* ===== Party Plan Page ===== */
+      .party-plan-page {
+        min-height: 100vh;
+      }
+
+      .party-plan-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 24px;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .party-plan-title {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 8px;
+      }
+
+      .party-plan-subtitle {
+        font-size: 15px;
+        color: var(--text-light);
+      }
+
+      .clear-plan-btn {
+        background: white;
+        border: 2px solid #e74c3c;
+        color: #e74c3c;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        white-space: nowrap;
+      }
+
+      .clear-plan-btn:hover {
+        background: #e74c3c;
+        color: white;
+      }
+
+      .party-plan-sections {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .party-plan-section {
+        background: var(--bg-card);
+        border-radius: var(--radius);
+        padding: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      /* ===== Drink Order List ===== */
+      .drink-order-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .drink-order-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background: var(--bg);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        transition: var(--transition);
+      }
+
+      .drink-order-item:hover {
+        border-color: var(--primary-light);
+      }
+
+      .drink-order-number {
+        width: 32px;
+        height: 32px;
+        background: var(--primary);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+
+      .drink-order-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        cursor: pointer;
+        min-width: 0;
+      }
+
+      .drink-order-color {
+        width: 4px;
+        height: 40px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      .drink-order-name {
+        font-weight: 600;
+        font-size: 15px;
+        color: var(--text);
+      }
+
+      .drink-order-name-en {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .drink-order-actions {
+        display: flex;
+        gap: 6px;
+        flex-shrink: 0;
+      }
+
+      .order-btn {
+        width: 28px;
+        height: 28px;
+        border: 1px solid var(--border);
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: var(--transition);
+        color: var(--text-light);
+      }
+
+      .order-btn:hover:not(:disabled) {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .order-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .remove-btn {
+        width: 28px;
+        height: 28px;
+        border: 1px solid #e74c3c;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: var(--transition);
+        color: #e74c3c;
+      }
+
+      .remove-btn:hover {
+        background: #e74c3c;
+        color: white;
+      }
+
+      /* ===== Shopping List ===== */
+      .shopping-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .shopping-item {
+        padding: 12px;
+        background: var(--bg);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+      }
+
+      .shopping-item-main {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+
+      .shopping-item-name {
+        font-weight: 600;
+        font-size: 15px;
+        color: var(--text);
+      }
+
+      .shopping-item-amount {
+        font-weight: 600;
+        color: var(--primary);
+        font-size: 14px;
+      }
+
+      .shopping-item-cocktails {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
       /* ===== Responsive ===== */
       @media (max-width: 600px) {
         .logo {
@@ -588,6 +812,18 @@
 
         .search-bar {
           flex-direction: column;
+        }
+
+        .party-plan-sections {
+          grid-template-columns: 1fr;
+        }
+
+        .party-plan-title {
+          font-size: 22px;
+        }
+
+        .drink-order-name {
+          font-size: 14px;
         }
       }
     </style>

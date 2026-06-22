@@ -6,9 +6,11 @@ interface Props {
   favorites: string[];
   toggleFavorite: (id: string) => void;
   openDetail: (id: string) => void;
+  partyPlanIds: string[];
+  togglePartyPlan: (id: string) => void;
 }
 
-export function HomePage({ favorites, toggleFavorite, openDetail }: Props) {
+export function HomePage({ favorites, toggleFavorite, openDetail, partyPlanIds, togglePartyPlan }: Props) {
   const [search, setSearch] = useState('');
   const [spiritFilter, setSpiritFilter] = useState<BaseSpirit | null>(null);
   const [diffFilter, setDiffFilter] = useState<number | null>(null);
@@ -106,16 +108,28 @@ export function HomePage({ favorites, toggleFavorite, openDetail }: Props) {
                       <div className="card-name">{c.name}</div>
                       <div className="card-name-en">{c.nameEn}</div>
                     </div>
-                    <button
-                      className="fav-btn"
-                      onClick={e => {
-                        e.stopPropagation();
-                        toggleFavorite(c.id);
-                      }}
-                      title={favorites.includes(c.id) ? '取消收藏' : '收藏'}
-                    >
-                      {favorites.includes(c.id) ? '❤️' : '🤍'}
-                    </button>
+                    <div className="card-actions">
+                      <button
+                        className="party-check-btn"
+                        onClick={e => {
+                          e.stopPropagation();
+                          togglePartyPlan(c.id);
+                        }}
+                        title={partyPlanIds.includes(c.id) ? '从派对计划移除' : '加入派对计划'}
+                      >
+                        {partyPlanIds.includes(c.id) ? '☑️' : '⬜'}
+                      </button>
+                      <button
+                        className="fav-btn"
+                        onClick={e => {
+                          e.stopPropagation();
+                          toggleFavorite(c.id);
+                        }}
+                        title={favorites.includes(c.id) ? '取消收藏' : '收藏'}
+                      >
+                        {favorites.includes(c.id) ? '❤️' : '🤍'}
+                      </button>
+                    </div>
                   </div>
                   <div className="card-meta">
                     <span className="tag tag-spirit">{c.baseSpirit}</span>
